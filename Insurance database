@@ -179,6 +179,12 @@ insert into Loan_410 values
 (4,"Sbi_ParliamentRoad",4000),
 (5,"Sbi_jantarmntar",5000);
 
-select customer_name,accno from Depositer_410
+select customer_name,accno from Depositer_410  COUNT(*) AS deposit_count
+where branch_name=sbi_
 GROUP BY customer_name, branch_name
 HAVING COUNT(*) >= 2;
+
+SELECT branch_name, 
+       (assets / 100000) AS `assets in lakhs`
+FROM Branch;
+
