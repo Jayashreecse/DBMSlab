@@ -1,0 +1,85 @@
+lab program 3 bank database
+
+create database Bankdb;
+use Bankdb;
+
+create table Branch_410(
+branch_name varchar(30) primary key,
+branch_city varchar(50),
+assets real
+);
+
+create table BankAccount_410 (
+    accno INT PRIMARY KEY,
+    branch_name VARCHAR(100),
+    balance REAL,
+    FOREIGN KEY (branch_name) REFERENCES Branch_410(branch_name)
+);
+
+CREATE TABLE BankCustomer_410 (
+    customer_name VARCHAR(100) PRIMARY KEY ,
+    customer_street VARCHAR(100),
+    customer_city VARCHAR(100),
+);
+CREATE TABLE Depositer_410 (
+    customer_name VARCHAR(100),
+    accno INT,
+    PRIMARY KEY (customer_name, accno),
+    FOREIGN KEY (customer_name) REFERENCES BankCustomer_410(customer_name),
+    FOREIGN KEY (accno) REFERENCES BankAccount_410(accno)
+);
+
+CREATE TABLE Loan_410 (
+    loan_number INT PRIMARY KEY,
+    branch_name VARCHAR(100),
+    amount REAL,
+    FOREIGN KEY (branch_name) REFERENCES Branch_410(branch_name)
+);
+
+insert into Branch_410 values
+("Sbi_chamrajpet","Bangalore",10000),
+("Sbi_Recidencyroad","Bangalore",20000),
+("Sbi_ShivajiRoad","Bombay",30000),
+("Sbi_ParliamentRoad","Delhi",40000),
+("Sbi_jantarmntar","Delhi",50000);
+
+insert into BankAccount_410 values 
+(1,"Sbi_chamrajpet","Bangalore",50000),
+(2,"Sbi_Recidencyroad","Bangalore",4500),
+(3,"Sbi_ShivajiRoad","Bombay",5000),
+(4,"Sbi_ParliamentRoad","Delhi",60000),
+(5,"Sbi_jantarmntar","Delhi",80000),
+(6,"Sbi_Recidencyroad","Bangalore",95000),
+(7,"Sbi_ShivajiRoad","Bombay",50000);
+
+insert into BankCustomer_410 values 
+("Avinash","Bull_Temple_road","Bangalore"),
+("Dinesh","Bannerghtta_road","Bangalore"),
+("Mohan","National_college_road","Bangalore"),
+("Nikil","Akbar_road","Bangalore"),
+("Ravi","Prithviraj_road","Bangalore");
+
+insert into Depositer_410 values
+("Avinash",1),
+("Dinesh",2),
+("Mohan",3),
+("Nikil",4),
+("Ravi",5),
+("Mohan",6),
+("Nikil",7);
+
+insert into Loan_410 values
+(1,"Sbi_chamrajpet",1000),
+(2,"Sbi_Recidencyroad",2000),
+(3,"Sbi_ShivajiRoad",3000),
+(4,"Sbi_ParliamentRoad",4000),
+(5,"Sbi_jantarmntar",5000);
+
+select customer_name,accno from Depositer_410  COUNT(*) AS deposit_count
+where branch_name=sbi_
+GROUP BY customer_name, branch_name
+HAVING COUNT(*) >= 2;
+
+SELECT branch_name, 
+       (assets / 100000) AS `assets in lakhs`
+FROM Branch;
