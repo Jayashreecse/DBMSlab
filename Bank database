@@ -83,3 +83,56 @@ HAVING COUNT(*) >= 2;
 SELECT branch_name, 
        (assets / 100000) AS `assets in lakhs`
 FROM Branch;
+
+additioanl queries
+
+
+select d.customer_name,b.branch_name
+ from Depositer_410 d 
+join BankAccount_410 b on d.accno =b.accno
+ group by d.customer_name,b.branch_name 
+ having count(b.accno)>=2;
+ 
+ create view br 
+ as select branch_name ,sum(amount)
+ from Loan_410
+ group by branch_name;
+ select * from br;
+ 
+ select branch_name,assets as total_assets
+ from Branch_410;
+ 
+ select customer_name,customer_city 
+ from BankCustomer_410
+ where customer_city ="Delhi";
+ 
+ 
+ select customer_name,accno
+ from Depositer_410;
+ 
+ select customer_name,accno 
+ from Depositer_410 
+ where city;
+ 
+ 
+ 
+ 
+ select d.customer_name,b.balance 
+ from depositer_410 d, BankAccount_410 b
+ where d.accno=b.accno 
+ and balance >6000;
+ 
+ 
+  select b.branch_name,count(accno) as no_of_acc
+ from BankAccount_410 b,Branch_410 br
+ where b.branch_name=br.branch_name
+ group by branch_name;
+ 
+ select b.branch_name,l.loan_number
+ from Branch_410 b,Loan_410 l
+  where b.branch_name
+  not in (select branch_name from Loan_410);
+  
+  select branch_name,amount 
+  from Loan_410 where amount=
+  (select min(amount) from Loan_410);
