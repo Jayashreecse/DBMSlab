@@ -1,0 +1,139 @@
+create database emp5;
+use emp5;
+
+create table employee(
+empno int primary key,
+ename varchar(50),
+mgrno int,
+hiredate date,
+sal int,
+deptno int ,
+foreign key (deptno) references dept(deptno)
+);
+alter table employee 
+modify hiredate varchar(20);
+desc employee;
+
+create table project(
+pno int primary key,
+ploc varchar(30),
+pname varchar(30)
+);
+desc project;
+
+create table dept(
+deptno int primary key,
+dname varchar(50),
+dloc varchar(30)
+);
+desc dept;
+
+create table incentives(
+empno int ,
+incentive_date date primary key,
+incentive_amount int,
+foreign key (empno) references employee (empno)
+);
+alter table incentives 
+modify incentive_date varchar(20);
+desc incentives;
+
+create table assigned_to(
+empno int,
+pno int,
+job_role varchar(50),
+foreign key (empno) references employee (empno),
+foreign key (pno) references project (pno)
+);
+desc assigned_to;
+
+insert into dept values 
+(1,"CSE","pj"),
+(2,"ISE","pj"),
+(3,"CSDS","pg"),
+(4,"ECE","pg"),
+(5,"AIML","pj"),
+(6,"CSDS","pg"),
+(7,"CS","pg");
+
+insert into employee values 
+(101,"mdr",100,"21/01/1999",100000,1),
+(201,"msak",200,"17/01/2020",50000,2),
+(301,"grp",100,"01/09/2004",30000,3),
+(401,"sws",101,"03/08/2000",10000,4),
+(501,"sks",101,"29/02/2008",90000,5),
+(601,"mdr",100,"21/01/1999",100000,6),
+(701,"rcb",100,"22/02/1998",60000,7);
+
+insert into incentives values
+(101,"12/03/2004",50000), 
+(201,"17/03/2024",25000),
+(301,"01/12/2019",15000),
+(401,"12/03/2019",5000),
+(501,"03/11/2019",45000),
+(701,"23/11/2018",35000);
+
+insert into project values
+(10,"bng","chatbot"),
+(40,"delhi","ml model"),
+(50,"bombay","block chain"),
+(30,"chennai","stocks"),
+(80,"mysore","android app"),
+(90,"pg","freefire");
+
+insert into assigned_to values
+(101,10,"drops"),
+(201,40,"sde"),
+(301,50,"manager"),
+(401,30,"jpa"),
+(501,80,"pa"),
+(701,90,"developer");
+select * from assigned_to;
+
+select empno 
+from assigned_to a
+where a.pno=any(
+select pno
+from project
+where ploc in("bng","hyderbad","mysore"));
+
+select empno 
+from incentives i
+where not exists (
+select empno 
+from employee e
+where (e.empno=i.empno));
+
+select e.empno
+from employee e
+where e.empno !=all
+(select i.empno
+ from incentives i);
+
+select e.ename,e.empno,d.deptno,a.job_role,d.dloc,p.ploc
+from employee e,dept d,assigned_to a,project p
+where e.deptno=d.deptno and a.empno=e.empno and a.pno=p.pno and d.dloc=p.ploc;
+
+select e.ename,e.empno,a.job_role,p.ploc,p.pname
+from employee e,assigned_to a,project p
+where a.empno=e.empno and a.pno=p.pno;
+
+select i.empno,e.ename,sum(i.incentive_amount)as total_amount
+from incentives i , employee e 
+where i.empno=e.empno
+group by e.empno,e.ename;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
